@@ -38,14 +38,14 @@ jobs:
         with:
           submodules: recursive
       - name: Check out pinned ESP-IDF
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: espressif/esp-idf
           ref: ${{ matrix.idf_ref }}
           path: .esp-idf
           submodules: recursive
       - name: Cache SDK tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.espressif
           key: idf-${{ runner.os }}-${{ runner.arch }}-${{ matrix.idf_ref }}-${{ matrix.target }}
@@ -66,7 +66,7 @@ jobs:
           source .esp-idf/export.sh
           python tools/build_firmware.py --profile "$PROFILE" --version "$FIRMWARE_VERSION" --output artifacts
       - name: Upload firmware
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: firmware-${{ matrix.id }}
           path: artifacts/${{ matrix.id }}/
@@ -74,7 +74,7 @@ jobs:
           retention-days: 30
       - name: Upload build diagnostics
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: diagnostics-${{ matrix.id }}
           path: |
@@ -97,7 +97,7 @@ jobs:
       - name: Collect firmware and combined manifest
         run: python3 tools/collect_firmware.py --input downloaded-firmware --output firmware --catalog firmware-targets.json
       - name: Upload complete firmware set
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: esp-sdr-firmware
           path: firmware/
